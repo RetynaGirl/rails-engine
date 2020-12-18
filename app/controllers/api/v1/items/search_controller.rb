@@ -3,7 +3,7 @@ class Api::V1::Items::SearchController < ApplicationController
     search_param = permit_params.to_h.first
 
     begin
-      item = Item.where("#{search_param[0]} like ?", "%#{search_param[1]}%").limit(1).first
+      item = Item.where("#{search_param[0]} ilike ?", "%#{search_param[1]}%").limit(1).first
 
       item_data = {
         id: item.id,
@@ -20,7 +20,7 @@ class Api::V1::Items::SearchController < ApplicationController
   def index
     search_param = permit_params.to_h.first
     begin
-      items = Item.where("#{search_param[0]} like ?", "%#{search_param[1]}%")
+      items = Item.where("#{search_param[0]} ilike ?", "%#{search_param[1]}%")
 
       items_data = items.map do |item|
         {

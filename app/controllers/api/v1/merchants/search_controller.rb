@@ -4,7 +4,7 @@ class Api::V1::Merchants::SearchController < ApplicationController
 
     begin
 
-      merchant = Merchant.where("#{search_param[0]} like ?", "%#{search_param[1]}%").limit(1).first
+      merchant = Merchant.where("#{search_param[0]} ilike ?", "%#{search_param[1]}%").limit(1).first
 
       merchant_data = {
         id: merchant.id,
@@ -21,7 +21,7 @@ class Api::V1::Merchants::SearchController < ApplicationController
   def index
     search_param = permit_params.to_h.first
     begin
-      merchants = Merchant.where("#{search_param[0]} like ?", "%#{search_param[1]}%")
+      merchants = Merchant.where("#{search_param[0]} ilike ?", "%#{search_param[1]}%")
 
       merchants_data = merchants.map do |merchant|
         {
