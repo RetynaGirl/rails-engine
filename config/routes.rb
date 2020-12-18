@@ -13,7 +13,11 @@ Rails.application.routes.draw do
         get '/:id/items', to: 'items#index'
         get '/find', to: 'search#show'
         get '/find_all', to: 'search#index'
+        get '/most_revenue', to: 'statistics#most_revenue'
+        get '/most_items_sold', to: 'statistics#most_items_sold'
       end
+
+      get '/revenue', to: 'statistics#revenue_date_range'
 
       resources :items, only: [:index, :show, :create, :update, :destroy]
       resources :merchants, only: [:index, :show, :create, :update, :destroy]
