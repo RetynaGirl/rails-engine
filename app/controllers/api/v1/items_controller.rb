@@ -19,6 +19,8 @@ class Api::V1::ItemsController < ApplicationController
     item = Item.find(params[:id])
 
     render json: structure_single(item)
+  rescue ActiveRecord::RecordNotFound
+    render nothing: true, status: :no_content
   end
 
   def create
