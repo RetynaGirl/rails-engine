@@ -19,6 +19,8 @@ class Api::V1::MerchantsController < ApplicationController
     merchant = Merchant.find(params[:id])
 
     render json: structure_single(merchant)
+  rescue ActiveRecord::RecordNotFound
+    render nothing: true, status: :no_content
   end
 
   def create

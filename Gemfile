@@ -15,7 +15,7 @@ gem 'puma', '~> 3.11'
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-
+gem 'rubocop'
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
@@ -44,6 +44,7 @@ end
 group :test do
   gem 'simplecov'
   gem 'capybara'
+  gem 'rspec'
   gem 'rspec-rails'
 end
 
