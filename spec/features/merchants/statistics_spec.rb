@@ -52,4 +52,27 @@ describe Api::V1::Merchants::StatisticsController, type: :controller do
       expect(data[:data][2][:id]).to eq(@merchant3.id.to_s)
     end
   end
+
+  describe 'revenue' do
+    it 'merchant 1' do
+      response = get :revenue, params: { id: @merchant1.id }
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:data][:attributes][:revenue]).to eq(80.0)
+    end
+
+    it 'merchant 2' do
+      response = get :revenue, params: { id: @merchant2.id }
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:data][:attributes][:revenue]).to eq(54.0)
+    end
+
+    it 'merchant 3' do
+      response = get :revenue, params: { id: @merchant3.id }
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:data][:attributes][:revenue]).to eq(90.0)
+    end
+  end
 end
