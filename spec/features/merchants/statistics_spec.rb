@@ -29,17 +29,27 @@ describe Api::V1::Merchants::StatisticsController, type: :controller do
     @transaction1 = @invoice1.transactions.create(credit_card_number: '4017503416578382', credit_card_expiration_date: '04/23', result: 'success')
     @transaction2 = @invoice2.transactions.create(credit_card_number: '4017503416578382', credit_card_expiration_date: '04/23', result: 'success')
     @transaction3 = @invoice3.transactions.create(credit_card_number: '4017503416578382', credit_card_expiration_date: '04/23', result: 'success')
-
   end
 
   describe 'most_revenue' do
     it do
-    response = get :most_revenue
-    data = JSON.parse(response.body, symbolize_names: true)
-    # require 'pry'; binding.pry
-    expect(data[:data][0][:id]).to eq(@merchant3.id.to_s)
-    expect(data[:data][1][:id]).to eq(@merchant1.id.to_s)
-    expect(data[:data][2][:id]).to eq(@merchant2.id.to_s)
+      response = get :most_revenue
+      data = JSON.parse(response.body, symbolize_names: true)
+      # require 'pry'; binding.pry
+      expect(data[:data][0][:id]).to eq(@merchant3.id.to_s)
+      expect(data[:data][1][:id]).to eq(@merchant1.id.to_s)
+      expect(data[:data][2][:id]).to eq(@merchant2.id.to_s)
+    end
+  end
+
+  describe 'most_items_sold' do
+    it do
+      response = get :most_items_sold
+      data = JSON.parse(response.body, symbolize_names: true)
+      # require 'pry'; binding.pry
+      expect(data[:data][0][:id]).to eq(@merchant2.id.to_s)
+      expect(data[:data][1][:id]).to eq(@merchant1.id.to_s)
+      expect(data[:data][2][:id]).to eq(@merchant3.id.to_s)
     end
   end
 end

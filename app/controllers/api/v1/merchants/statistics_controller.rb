@@ -44,6 +44,7 @@ class Api::V1::Merchants::StatisticsController < ApplicationController
   end
 
   def most_items_sold
+  quantity = params[:quantity] || 10
     # merchants = Merchant.select('merchants.*, SUM(invoice_items.quantity) AS sum_invoice_items_quantity')
     #                     .joins(:invoice_items, :transactions)
     #                     .where("invoices.status = 'shipped' AND (transactions.result = 'success')")
@@ -59,7 +60,7 @@ merchants_data = ActiveRecord::Base.connection.execute('SELECT merchants.*, SUM(
                                                        WHERE (invoices.status = ' + "'shipped'" + ') AND (transactions.result = ' + "'success'" + ')
                                                        GROUP BY merchants.id
                                                        ORDER BY sum_invoice_items_quantity DESC
-                                                       ' + "LIMIT #{params[:quantity]}")
+                                                       ' + "LIMIT #{quantity}")
 
     # require 'pry'; binding.pry
     begin
