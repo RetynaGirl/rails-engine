@@ -3,7 +3,6 @@ class Api::V1::Items::SearchController < ApplicationController
     search_param = permit_params.to_h.first
 
     begin
-      # item = Item.find_by!(search_param[0] => search_param[1])
       item = Item.where("#{search_param[0]} like ?", "%#{search_param[1]}%").limit(1).first
 
       item_data = {
