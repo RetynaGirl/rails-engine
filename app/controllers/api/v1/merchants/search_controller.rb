@@ -18,6 +18,29 @@ class Api::V1::Merchants::SearchController < ApplicationController
     end
   end
 
+  def index
+    search_param = permit_params.to_h.first
+    begin
+      merchants = Merchant.where("#{search_param[0]} like ?", "%#{search_param[1]}%")
+
+      merchants_data = merchants.map do |merchant|
+        {
+          id: merchant.id,
+          type: 'merchant',
+          attributes: merchant.attributes
+        }
+      end
+
+      structure = {
+        data: merchants_data
+      }
+
+      render json: structure
+    rescue ActiveRecord::RecordNotFound
+      render nothing: true, status: :no_content
+    end
+  end
+
   private
 
   def permit_params
