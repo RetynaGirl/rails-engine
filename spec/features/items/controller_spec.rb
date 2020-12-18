@@ -80,4 +80,20 @@ describe Api::V1::ItemsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
+
+  describe 'destroy' do
+    it 'good request' do
+      merchant1 = Merchant.create(name: 'steve')
+      item1 = Item.create(name: 'adkfjadlkj', unit_price: 12.56, merchant_id: merchant1.id, description: 'its a thing')
+
+      response = delete :destroy, params: { id: item1.id }
+
+      expect(response).to have_http_status(:no_content)
+
+      response = get :index
+
+      data = JSON.parse(response.body, symbolize_names: true)
+      expect(data[:data][0]).to be_nil
+    end
+  end
 end
