@@ -8,7 +8,7 @@ class Api::V1::Merchants::SearchController < ApplicationController
 
 
       render json: structure_single(merchant)
-    rescue ActiveRecord::RecordNotFound
+    rescue ActiveRecord::RecordNotFound, NoMethodError
       render nothing: true, status: :no_content
     end
   end
@@ -17,6 +17,8 @@ class Api::V1::Merchants::SearchController < ApplicationController
     search_param = permit_params.to_h.first
     begin
       merchants = Merchant.where("#{search_param[0]} ilike ?", "%#{search_param[1]}%")
+
+      raise ActiveRecord::RecordNotFound.new('No search results') if merchants.length.zero?
 
       merchants_data = merchants.map do |merchant|
         {
