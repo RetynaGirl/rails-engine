@@ -15,6 +15,7 @@ Rails.application.routes.draw do
         get '/find_all', to: 'search#index'
         get '/most_revenue', to: 'statistics#most_revenue'
         get '/most_items_sold', to: 'statistics#most_items_sold'
+        get '/:id/revenue', to: 'statistics#revenue'
       end
 
       get '/revenue', to: 'statistics#revenue_date_range'
