@@ -8,7 +8,7 @@ class Api::V1::Items::SearchController < ApplicationController
 
 
       render json: structure_single(item)
-    rescue ActiveRecord::RecordNotFound
+    rescue ActiveRecord::RecordNotFound, NoMethodError
       render nothing: true, status: :no_content
     end
   end
@@ -17,6 +17,8 @@ class Api::V1::Items::SearchController < ApplicationController
     search_param = permit_params.to_h.first
     begin
       items = Item.where("#{search_param[0]} ilike ?", "%#{search_param[1]}%")
+
+      raise ActiveRecord::RecordNotFound.new('No search results') if items.length.zero?
 
       items_data = items.map do |item|
         {
