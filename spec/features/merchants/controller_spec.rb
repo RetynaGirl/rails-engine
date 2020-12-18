@@ -46,15 +46,42 @@ RSpec.describe Api::V1::MerchantsController, type: :controller do
 
   describe 'create' do
     it 'good request' do
-
-
-      response = post :create, params: {name: 'Edwin'}
+      response = post :create, params: { name: 'Edwin' }
 
       data = JSON.parse(response.body, symbolize_names: true)
 
       expect(data[:data][:attributes][:name]).to eq('Edwin')
 
       expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'update' do
+    it 'good request' do
+      merchant1 = Merchant.create(name: 'steve')
+
+      response = patch :update, params: { id: merchant1.id, name: 'Harold' }
+
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:data][:attributes][:name]).to eq('Harold')
+
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'destroy' do
+    it 'good request' do
+      merchant1 = Merchant.create(name: 'steve')
+
+      response = delete :destroy, params: { id: merchant1.id }
+
+      expect(response).to have_http_status(:no_content)
+
+      response = get :index
+
+      data = JSON.parse(response.body, symbolize_names: true)
+      expect(data[:data][1]).to be_nil
     end
   end
 end
