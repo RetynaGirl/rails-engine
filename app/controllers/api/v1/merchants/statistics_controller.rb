@@ -52,4 +52,22 @@ class Api::V1::Merchants::StatisticsController < ApplicationController
       render nothing: true, status: :no_content
     end
   end
+
+  def revenue
+    revenue = Merchant.find(params[:id])
+                      .invoice_items
+                      .where("invoices.status = 'shipped'")
+                      .sum('invoice_items.quantity * invoice_items.unit_price')
+
+    structure = {
+      data: {
+        id: nil,
+        attributes: {
+          revenue: revenue
+        }
+      }
+    }
+
+    render json: structure
+  end
 end
