@@ -48,4 +48,20 @@ describe Api::V1::ItemsController, type: :controller do
       expect(response).to have_http_status(:no_content)
     end
   end
+
+  describe 'create' do
+    it 'good request' do
+      merchant1 = Merchant.create(name: 'harold')
+      response = post :create, params: { name: 'adkfjadlkj', unit_price: 12.56, merchant_id: merchant1.id, description: 'its a thing' }
+
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:data][:attributes][:name]).to eq('adkfjadlkj')
+      expect(data[:data][:attributes][:unit_price]).to eq(12.56)
+      expect(data[:data][:attributes][:merchant_id]).to eq(merchant1.id)
+      expect(data[:data][:attributes][:description]).to eq('its a thing')
+
+      expect(response).to have_http_status(:success)
+    end
+  end
 end
