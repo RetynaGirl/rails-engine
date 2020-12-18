@@ -126,6 +126,10 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     regexp_parser (1.8.2)
+    rspec (3.10.0)
+      rspec-core (~> 3.10.0)
+      rspec-expectations (~> 3.10.0)
+      rspec-mocks (~> 3.10.0)
     rspec-core (3.10.0)
       rspec-support (~> 3.10.0)
     rspec-expectations (3.10.0)
@@ -183,6 +187,7 @@ DEPENDENCIES
   pry
   puma (~> 3.11)
   rails (~> 5.2.4, >= 5.2.4.4)
+  rspec
   rspec-rails
   simplecov
   spring
