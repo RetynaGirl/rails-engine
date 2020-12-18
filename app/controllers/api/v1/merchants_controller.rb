@@ -2,7 +2,7 @@ class Api::V1::MerchantsController < ApplicationController
   def index
     merchants = Merchant.all.map do |merchant|
       {
-        id: merchant.id,
+        id: merchant.id.to_s,
         type: 'merchant',
         attributes: merchant.attributes
       }
@@ -18,19 +18,13 @@ class Api::V1::MerchantsController < ApplicationController
   def show
     merchant = Merchant.find(params[:id])
 
-    merchant_data = {
-      id: merchant.id,
-      type: 'merchant',
-      attributes: merchant.attributes
-    }
-
-    render json: merchant_data
+    render json: structure_single(merchant)
   end
 
   def create
     merchant = Merchant.create!(permitted_params)
 
-    redirect_to api_v1_merchant_path(merchant.id)
+    render json: structure_single(merchant)
   end
 
   def update
@@ -38,7 +32,7 @@ class Api::V1::MerchantsController < ApplicationController
 
     merchant.update(permitted_params)
 
-    redirect_to api_v1_merchant_path(merchant.id)
+    render json: structure_single(merchant)
   end
 
   def destroy
@@ -52,8 +46,20 @@ class Api::V1::MerchantsController < ApplicationController
   private
 
   def permitted_params
-    params.require(:merchant).permit(
+    params.permit(
       :name
     )
+  end
+
+  def structure_single(merchant)
+    merchant_data = {
+      id: merchant.id.to_s,
+      type: 'merchant',
+      attributes: merchant.attributes
+    }
+
+    {
+      data: merchant_data
+    }
   end
 end

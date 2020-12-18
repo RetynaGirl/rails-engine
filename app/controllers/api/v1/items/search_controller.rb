@@ -5,13 +5,9 @@ class Api::V1::Items::SearchController < ApplicationController
     begin
       item = Item.where("#{search_param[0]} ilike ?", "%#{search_param[1]}%").limit(1).first
 
-      item_data = {
-        id: item.id,
-        type: 'item',
-        attributes: item.attributes
-      }
 
-      render json: item_data
+
+      render json: structure_single(item)
     rescue ActiveRecord::RecordNotFound
       render nothing: true, status: :no_content
     end
@@ -44,5 +40,17 @@ class Api::V1::Items::SearchController < ApplicationController
 
   def permit_params
     params.except(:controller, :action).permit!
+  end
+
+  def structure_single(item)
+    item_data = {
+      id: item.id.to_s,
+      type: 'item',
+      attributes: item.attributes
+    }
+
+    {
+      data: item_data
+    }
   end
 end

@@ -2,7 +2,7 @@ class Api::V1::ItemsController < ApplicationController
   def index
     items = Item.all.map do |item|
       {
-        id: item.id,
+        id: item.id.to_s,
         type: 'item',
         attributes: item.attributes
       }
@@ -18,19 +18,13 @@ class Api::V1::ItemsController < ApplicationController
   def show
     item = Item.find(params[:id])
 
-    item_data = {
-      id: item.id,
-      type: 'item',
-      attributes: item.attributes
-    }
-
-    render json: item_data
+    render json: structure_single(item)
   end
 
   def create
     item = Item.create!(permitted_params)
 
-    redirect_to api_v1_item_path(item.id)
+    render json: structure_single(item)
   end
 
   def update
@@ -38,7 +32,7 @@ class Api::V1::ItemsController < ApplicationController
 
     item.update(permitted_params)
 
-    redirect_to api_v1_item_path(item.id)
+    render json: structure_single(item)
   end
 
   def destroy
@@ -52,11 +46,23 @@ class Api::V1::ItemsController < ApplicationController
   private
 
   def permitted_params
-    params.require(:item).permit(
+    params.permit(
       :name,
       :description,
       :unit_price,
       :merchant_id
     )
+  end
+
+  def structure_single(item)
+    item_data = {
+      id: item.id.to_s,
+      type: 'item',
+      attributes: item.attributes
+    }
+
+    {
+      data: item_data
+    }
   end
 end

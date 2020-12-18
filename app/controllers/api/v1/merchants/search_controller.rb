@@ -6,13 +6,8 @@ class Api::V1::Merchants::SearchController < ApplicationController
 
       merchant = Merchant.where("#{search_param[0]} ilike ?", "%#{search_param[1]}%").limit(1).first
 
-      merchant_data = {
-        id: merchant.id,
-        type: 'merchant',
-        attributes: merchant.attributes
-      }
 
-      render json: merchant_data
+      render json: structure_single(merchant)
     rescue ActiveRecord::RecordNotFound
       render nothing: true, status: :no_content
     end
@@ -45,5 +40,17 @@ class Api::V1::Merchants::SearchController < ApplicationController
 
   def permit_params
     params.except(:controller, :action).permit!
+  end
+
+  def structure_single(merchant)
+    merchant_data = {
+      id: merchant.id.to_s,
+      type: 'merchant',
+      attributes: merchant.attributes
+    }
+
+    {
+      data: merchant_data
+    }
   end
 end
